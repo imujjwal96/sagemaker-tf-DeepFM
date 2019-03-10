@@ -1,8 +1,8 @@
-FROM tensorflow/tensorflow:latest-gpu-py3
+FROM tensorflow/tensorflow:1.10.1-gpu-py3
 
 WORKDIR /home/tf/
 
-COPY src/trainCNN.py /home/tf/trainCNN.py
+COPY src/ /home/tf/
 COPY input/ /opt/ml/input/
 
 RUN mkdir -p /opt/ml/output/
@@ -13,4 +13,4 @@ RUN pip install keras sklearn pydot
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
-ENTRYPOINT ["python", "train.py"]
+ENTRYPOINT ["python", "main.py"]
