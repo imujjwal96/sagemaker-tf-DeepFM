@@ -86,8 +86,6 @@ def _run_base_model_dfm(dfTrain, dfTest, folds, dfm_params):
     filename = "%s_Mean%.5f_Std%.5f.csv"%(clf_str, gini_results_cv.mean(), gini_results_cv.std())
     _make_submission(ids_test, y_test_meta, filename)
 
-    _plot_fig(gini_results_epoch_train, gini_results_epoch_valid, clf_str)
-
     return y_train_meta, y_test_meta
 
 
@@ -95,24 +93,6 @@ def _make_submission(ids, y_pred, filename="submission.csv"):
     print(pd.DataFrame({"id": ids, "target": y_pred.flatten()}))
     pd.DataFrame({"id": ids, "target": y_pred.flatten()}).to_csv(
         os.path.join(config.SUB_DIR, filename), index=False, float_format="%.5f")
-
-
-def _plot_fig(train_results, valid_results, model_name):
-    colors = ["red", "blue", "green"]
-    xs = np.arange(1, train_results.shape[1]+1)
-    plt.figure()
-    legends = []
-    for i in range(train_results.shape[0]):
-        plt.plot(xs, train_results[i], color=colors[i], linestyle="solid", marker="o")
-        plt.plot(xs, valid_results[i], color=colors[i], linestyle="dashed", marker="o")
-        legends.append("train-%d"%(i+1))
-        legends.append("valid-%d"%(i+1))
-    plt.xlabel("Epoch")
-    plt.ylabel("Normalized Gini")
-    plt.title("%s"%model_name)
-    plt.legend(legends)
-    plt.savefig("./fig/%s.png"%model_name)
-    plt.close()
 
 if __name__ == '__main__':
     # load data
